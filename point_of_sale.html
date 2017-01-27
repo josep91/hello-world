@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Get Started | Lemonade Stand Point-of-Sale</title>
+        <script src="jquery-3.1.1.js"></script>
+        <!--From https://developers.google.com/api-client-library/javascript/samples/samples#authorizing-and-making-authorized-requests-->
+   <!--     <script>
+        	function handleClientLoad() {
+        		// Loads the client library and the auth2 library together for efficiency.
+        		// Loading the auth2 library is optional here since `gapi.client.init` function will load
+        		// it if not already loaded. Loading it upfront can save one network request.
+        		gapi.load('client:auth2', initClient);
+      		}
+
+      		function initClient() {
+        		// Initialize the client with API key and People API, and initialize OAuth with an
+        		// OAuth 2.0 client ID and scopes (space delimited string) to request access.
+        		gapi.client.init({
+            		'apiKey': 'AIzaSyBmJCN4AmPtqeRMBTr3kdk7FQ7MsC8FgYM',
+		    		'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+		    		'clientId': '234987774387-h39chts8aro880r188duftnrdi03cmsr.apps.googleusercontent.com',
+		    		'scope': 'https://www.googleapis.com/auth/spreadsheets',
+        		}).then(function () {
+          			// Listen for sign-in state changes.
+          			gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+          			// Handle the initial sign-in state.
+          			updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    			});
+      		}
+
+      		function updateSigninStatus(isSignedIn) {
+        		// When signin status changes, this function is called.
+        		// If the signin status is changed to signedIn, we make an API call.
+        		if (isSignedIn) {
+          			makeApiCall();
+        		}
+      		}
+
+      		function handleSignInClick(event) {
+        		// Ideally the button should only show up after gapi.client.init finishes, so that this
+        		// handler won't be called before OAuth is initialized.
+        		gapi.auth2.getAuthInstance().signIn();
+      		}
+
+      		function handleSignOutClick(event) {
+        		gapi.auth2.getAuthInstance().signOut();
+      		}
+
+      		function makeApiCall() {
+        		// Make an API call to the People API, and print the user's given name.
+        		gapi.client.people.people.get({
+          		resourceName: 'people/me'
+        		}).then(function(response) {
+          			console.log('Hello, ' + response.result.names[0].givenName);
+        		}, function(reason) {
+          			console.log('Error: ' + reason.result.error.message);
+        		});
+      		}
+        </script>
+        <script async defer src="https://apis.google.com/js/api.js"
+      		onload="this.onload=function(){};handleClientLoad()"
+      		onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    	</script>
+    	<!-- From https://developers.google.com/sheets/api/quickstart/js --
+    	<script type="text/javascript">
+      	// Your Client ID can be retrieved from your project in the Google
+      	// Developer Console, https://console.developers.google.com
+      	var CLIENT_ID = '234987774387-h39chts8aro880r188duftnrdi03cmsr.apps.googleusercontent.com';
+
+      	var SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+
+      	/**
+       	* Check if current user has authorized this application.
+       	*/
+      	function checkAuth() {
+        	gapi.auth.authorize(
+          	{
+	            'client_id': CLIENT_ID,
+	            'scope': SCOPES.join(' '),
+	            'immediate': true
+          	}, handleAuthResult);
+      	}
+
+      	/**
+       	* Handle response from authorization server.
+       	*
+       	* @param {Object} authResult Authorization result.
+       	*/
+      	function handleAuthResult(authResult) {
+        	var authorizeDiv = document.getElementById('authorize-div');
+        	if (authResult && !authResult.error) {
+          	// Hide auth UI, then load client library.
+          	authorizeDiv.style.display = 'none';
+          	loadSheetsApi();
+        	} else {
+          	// Show auth UI, allowing the user to initiate authorization by
+          	// clicking authorize button.
+          	authorizeDiv.style.display = 'inline';
+        	}
+      	}
+
+      	/**
+       	* Initiate auth flow in response to user clicking authorize button.
+       	*
+       	* @param {Event} event Button click event.
+       	*/
+      	function handleAuthClick(event) {
+        	gapi.auth.authorize(
+          	{client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          	handleAuthResult);
+        	return false;
+      	}
+
+      	/**
+   		 * Load Sheets API client library.
+       	*/
+      	function loadSheetsApi() {
+        	var discoveryUrl =
+            	'https://sheets.googleapis.com/$discovery/rest?version=v4';
+        	gapi.client.load(discoveryUrl).then(listMajors);
+      	}
+
+      	/**
+       	* Print the names and majors of students in a sample spreadsheet:
+       	* https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+       	*/
+      	function listMajors() {
+        	gapi.client.sheets.spreadsheets.values.get({
+          	spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          	range: 'Class Data!A2:E',
+        }).then(function(response) {
+        	var range = response.result;
+          	if (range.values.length > 0) {
+            	appendPre('Name, Major:');
+            	for (i = 0; i < range.values.length; i++) {
+              		var row = range.values[i];
+              		// Print columns A and E, which correspond to indices 0 and 4.
+              		appendPre(row[0] + ', ' + row[4]);
+            	}
+          	} else {
+            	appendPre('No data found.');
+          	}
+    	}, function(response) {
+          	appendPre('Error: ' + response.result.error.message);
+        	});
+      	}
+
+      	/**
+       	* Append a pre element to the body containing the given message
+       	* as its text node.
+       	*
+       	* @param {string} message Text to be placed in pre element.
+       	*/
+      	function appendPre(message) {
+        	var pre = document.getElementById('output');
+        	var textContent = document.createTextNode(message + '\n');
+        	pre.appendChild(textContent);
+      	}
+    	</script>
+    	<script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    	</script>-->
+    	<script src="pos.js"></script>
+    	<link rel="stylesheet" href="point_of_sale_style_sheet.css">
+    </head>
+    <body>
+        <header>
+        <h1 id="title">Lemonade Stand Point-of-Sale</h1>
+        </header>
+        <div id="get_started">
+	        <h3>Get Started</h3>
+	        <h4>Enter this basic infor to set up the system.<br>Click on an item for more information.</h4>
+	        <form id="get_started_info" name="get_started_info" action="create_product_list.html">
+	        	<label for="business_name">Enter name of business or project:</label>
+	        	<input type="text" id="business_name" name="business_name" /><br>
+	        	
+	        	<label for="link_g_account">In order to access saved informatino or save new information, you will need to connect your Google Account to Lemonade Stand Point-of-Sale:</label>
+	        	<button id="link_g_account" >Link Google Account</button><br>
+	        	
+	        	<label for="choose_spreadsheet">Choose spreadsheet:</label>
+	        	<select name="choose_spreadsheet">
+	        			<option value="sheet1">Link Google Account First</option>
+	        			<option id="sheet1" value="sheet2">*</option>
+	        			<option value="sheet3">*</option>
+	        	</select><br><br>
+	        	
+	        	<input type="button" id="next_create_list" name="next_create_list" value="Next: Create Product List" />
+	        	
+	        </form>
+	        <!--From quickstart--
+	        <div id="authorize-div" style="display: none">
+      			<span>Authorize access to Google Sheets API</span>
+      			<!--Button for the user to click to initiate auth sequence --
+      			<button id="authorize-button" onclick="handleAuthClick(event)">
+        		Authorize
+      			</button>	
+    		</div>
+    		<pre id="output"></pre>-->
+    	</div>
+        <!--End get_started-->
+        <div id="create_products">
+	        <h3>Create Product List</h3>
+	        <h4>Enter a name and prict, in dollars, for each item that you want to sell.</h4>
+        	<form id="enter_products" name="enter_products">
+        		<label for="product1">Product 1:</label>
+        		<input type="text" id="product1" name="product1" />
+        		<label for="price1">Price: $</label>
+        		<input type="text" id="price1" name="price1" /><br>
+        	</form>
+        	<form>
+        		<input type="button" id="add_row" value="Add row" /><br>
+        		<input type="button" id="go_to_sales" name="go_to_sales" value="Next: Go to Point-of-Sale" />
+        	</form>
+        </div><!--End create_products-->
+        <div id="point_of_sale">
+			        	<h3>Sales</h3>
+			       	<p>
+				<ol>
+					<li>Click on a product to add it to the order.</li>
+					<li>Click on it again to add another one.</li>
+					<li>Use the Add or Discount buttons to add or subtract specific amounts from the order.</li>
+					<li>Click Checkout when the order is complete.</li>
+				</ol>
+			</p>
+			
+			<h2>Total Price: $
+			<span id="total_price" >0.00</span>
+			<input type="button" id="clear" value="Clear Order" />
+			<input type="button" id="checkout" value="Next: Checkout" />
+			</h2>
+			<form id="buy_buttons">
+				
+			</form>
+			<form>
+				<input id="add" type="button" value="Add" /><input id="add_amount" type="text" /><br>
+				<input id="discount" type="button" value="Discount" /><input id="discount_amount" type="text" /><br><br>
+				<input id="edit_product_list" value="Edit Product List" type="button" /><br>
+				<input type="button" id="go_to_transactions" value="View All Transactions" />
+			</form>
+        </div><!--End point_of_sale-->
+        <div id="confirm_order">
+	        	<h3>Checkout</h3>
+	        <h4>Review the order, then select Save Order.</h4>
+	        <table>
+	        	<tr id="heading">
+	        		<td><h4>Product</h4></td>
+	        		<td><h4>Quantity</h4></td>
+	        		<td><h4>Total Cost</h4></td>
+	        	</tr>
+	        	<tbody id="receipt">
+	        		
+	        	</tbody>
+	        	<tr>
+	        		<td>Add or Discount</td>
+	        		<td></td>
+	        		<td id ='addDiscountData'>$-.--</td>
+        		</tr>
+        		<tr>
+        			<td></td>
+        			<td><strong>Total:</strong></td>
+        			<td><strong id="totalData"></strong></td>
+        		</tr>
+	        </table>
+	        <form>
+        		<input type="button" id="save_order" value="Save Order" />
+        	</form>
+        </div><!--End confirm_order-->
+        <div id="show_transactions">
+	        <h3>Transactions</h3>
+	        <h4>View your recorded transactions.</h4>
+	        <table>
+	        	<tr id="transaction_headings">
+	        		<td><h4>Timestamp</h4></td>
+	        		<td><h4>Total Price</h4></td>
+	        	</tr>
+	        	<tbody id="transaction_list">
+	        		
+	        	</tbody>
+        		<tr id="transaction_totals">
+        			<td><strong>Total:</strong></td>
+        			<td><strong id="transaction_total">*</strong></td>
+        		</tr>
+	        </table>
+	        <form>
+        		<input type="button" id="return_to_sales" value="Return to Point-of-Sale" />
+        	</form>
+        </div><!--End confirm_order-->
+
+    </body>
+</html>
