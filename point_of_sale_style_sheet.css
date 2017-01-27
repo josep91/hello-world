@@ -1,0 +1,24 @@
+body {
+	font-size: 100%;
+	margin-left: 2em;
+	margin-right: 2em;
+}
+header {
+	padding-bottom: .75em;
+	border.bottom: 3px solid black;
+	margin-bottom: 0;
+}
+h1 {
+	font-size: 200%;
+	margin-bottom: 0;	
+}
+input[type="button"] {
+	color: white;
+	font-size: 100%;
+	background: #32cd32;
+	font-family:"Courier New";
+	border: ridge;
+}
+input[type="text"] {
+	margin: 3px;
+}
