@@ -1,4 +1,5 @@
 /**
+ * Note: Add the aility to go back and edit an order. 
  * @author Joseph Nielson
  */
 
@@ -221,7 +222,7 @@ $(document).ready(function() {
 					receiptHTMLString += "<td></td>";
 				}
 			};
-			$("#transaction_list").append("<tr class='data'><td>" + transactions[i][0].toString() + "</td><td>$" + transactions[i][1].toFixed(2) + "</td>" + receiptHTMLString + "<td>$" + transactions[i][3].toFixed(2) + "</td></tr>");
+			$("#transaction_list").append("<tr class='data'><td>" + transactions[i][0].toLocaleString() + "</td><td>$" + transactions[i][1].toFixed(2) + "</td>" + receiptHTMLString + "<td>$" + transactions[i][3].toFixed(2) + "</td></tr>");
 		};
 		
 		//Calculate total of all transactions and add to total row
