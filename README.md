@@ -1,7 +1,7 @@
 # hello-world
 I am learning about GitHub :)
 
-In church, I am a Mormon--a follower of Jesus Christ. I love to serve people and learn as much as I can about the gospel (see mormon.org) and share it with others.
+In church, I am a member of The Church of Jesus Christ of Latter-day Saints.
 
 In family, I am the oldest brother of a large family. We love to spend time together and travel.
 
